@@ -1,0 +1,242 @@
+ ```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glosario HTML y CSS</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --text-color: #333;
+            --light-bg: #ecf0f1;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+            color: var(--text-color);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            color: var(--secondary-color);
+            border-bottom: 3px solid var(--secondary-color);
+            padding-bottom: 10px;
+            margin-top: 30px;
+        }
+
+        .etiqueta-card {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .etiqueta-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .etiqueta-nombre {
+            color: var(--accent-color);
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+        }
+
+        .ejemplo-codigo {
+            background-color: var(--light-bg);
+            padding: 10px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+
+        .categoria {
+            background: var(--primary-color);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            display: inline-block;
+            margin: 5px 0;
+        }
+
+        #menu {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        #menu a {
+            display: block;
+            color: var(--primary-color);
+            text-decoration: none;
+            padding: 5px 0;
+        }
+
+        #menu a:hover {
+            color: var(--secondary-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Glosario de HTML y CSS</h1>
+            <p>Guía completa de etiquetas básicas para estructurar páginas web</p>
+        </header>
+
+        <nav id="menu">
+            <a href="#estructura-basica">Estructura Básica</a>
+            <a href="#texto">Etiquetas de Texto</a>
+            <a href="#contenedores">Contenedores</a>
+            <a href="#formularios">Formularios</a>
+            <a href="#css-basico">CSS Básico</a>
+        </nav>
+
+        <section id="estructura-basica">
+            <h2 class="section-title">Estructura Básica HTML</h2>
+            
+            <div class="etiqueta-card">
+                <span class="categoria">Documento</span>
+                <h3 class="etiqueta-nombre">&lt;!DOCTYPE html&gt;</h3>
+                <p>Define que el documento es HTML5</p>
+                <div class="ejemplo-codigo">
+                    &lt;!DOCTYPE html&gt;
+                </div>
+            </div>
+
+            <div class="etiqueta-card">
+                <span class="categoria">Raíz</span>
+                <h3 class="etiqueta-nombre">&lt;html&gt;</h3>
+                <p>Elemento raíz de un documento HTML</p>
+                <div class="ejemplo-codigo">
+                    &lt;html lang="es"&gt;...&lt;/html&gt;
+                </div>
+            </div>
+
+            <div class="etiqueta-card">
+                <span class="categoria">Metadatos</span>
+                <h3 class="etiqueta-nombre">&lt;head&gt;</h3>
+                <p>Contiene metadatos y enlaces a recursos</p>
+                <div class="ejemplo-codigo">
+                    &lt;head&gt;
+                        &lt;meta charset="UTF-8"&gt;
+                        &lt;title&gt;Título de la página&lt;/title&gt;
+                    &lt;/head&gt;
+                </div>
+            </div>
+
+            <div class="etiqueta-card">
+                <span class="categoria">Contenido</span>
+                <h3 class="etiqueta-nombre">&lt;body&gt;</h3>
+                <p>Contiene el contenido visible de la página</p>
+                <div class="ejemplo-codigo">
+                    &lt;body&gt;...&lt;/body&gt;
+                </div>
+            </div>
+        </section>
+
+        <section id="texto">
+            <h2 class="section-title">Etiquetas de Texto</h2>
+            
+            <div class="etiqueta-card">
+                <span class="categoria">Encabezados</span>
+                <h3 class="etiqueta-nombre">&lt;h1&gt; a &lt;h6&gt;</h3>
+                <p>Define encabezados de diferentes niveles</p>
+                <div class="ejemplo-codigo">
+                    &lt;h1&gt;Título Principal&lt;/h1&gt;
+                    &lt;h2&gt;Subtítulo&lt;/h2&gt;
+                </div>
+            </div>
+
+            <div class="etiqueta-card">
+                <span class="categoria">Párrafo</span>
+                <h3 class="etiqueta-nombre">&lt;p&gt;</h3>
+                <p>Define un párrafo de texto</p>
+                <div class="ejemplo-codigo">
+                    &lt;p&gt;Este es un párrafo&lt;/p&gt;
+                </div>
+            </div>
+        </section>
+
+        <section id="css-basico">
+            <h2 class="section-title">Propiedades CSS Básicas</h2>
+            
+            <div class="etiqueta-card">
+                <span class="categoria">Estilo</span>
+                <h3 class="etiqueta-nombre">color</h3>
+                <p>Define el color del texto</p>
+                <div class="ejemplo-codigo">
+                    color: #ff0000;
+                    color: rgb(255, 0, 0);
+                </div>
+            </div>
+
+            <div class="etiqueta-card">
+                <span class="categoria">Diseño</span>
+                <h3 class="etiqueta-nombre">margin / padding</h3>
+                <p>Define los márgenes externos e internos</p>
+                <div class="ejemplo-codigo">
+                    margin: 10px;
+                    padding: 15px 20px;
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Animación suave al hacer scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Animación de las tarjetas al aparecer
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        });
+
+        document.querySelectorAll('.etiqueta-card').forEach((card) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>
