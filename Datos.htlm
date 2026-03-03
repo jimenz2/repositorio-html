@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Ciclo Virtuoso del Aprendizaje STEM</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Mono:wght@400;600&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #050a0e;
+    --surface: #0c1419;
+    --card: #111c24;
+    --accent1: #00e5c3;
+    --accent2: #ff6b35;
+    --accent3: #a78bfa;
+    --accent4: #fbbf24;
+    --text: #e8f4f8;
+    --muted: #5a7a8a;
+    --border: rgba(0,229,195,0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Outfit', sans-serif;
+    overflow-x: hidden;
+    line-height: 1.6;
+  }
+
+  /* ---- HERO ---- */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 60px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 70% 50% at 20% 40%, rgba(0,229,195,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 60%, rgba(167,139,250,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 30% at 50% 10%, rgba(255,107,53,0.05) 0%, transparent 50%);
+  }
+
+  .hero-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    color: var(--accent1);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s forwards;
+  }
+
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2.8rem, 7vw, 6rem);
+    line-height: 1.05;
+    max-width: 900px;
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.4s forwards;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--accent1);
+  }
+
+  .hero-sub {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: #8faab5;
+    max-width: 640px;
+    font-weight: 300;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.6s forwards;
+    margin-bottom: 48px;
+  }
+
+  .scroll-hint {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+    opacity: 0;
+    animation: fadeUp 0.8s 1s forwards;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .scroll-hint::before, .scroll-hint::after {
+    content: '';
+    width: 40px;
+    height: 1px;
+    background: var(--muted);
+  }
+
+  /* Orbit animation */
+  .orbit-wrap {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .orbit-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid;
+    opacity: 0;
+    animation: orbitFade 1.5s 0.8s forwards;
+  }
+
+  .r1 { width: 500px; height: 500px; top: 50%; left: 50%; transform: translate(-50%,-50%); border-color: rgba(0,229,195,0.06); animation-delay: 0.8s; }
+  .r2 { width: 800px; height: 800px; top: 50%; left: 50%; transform: translate(-50%,-50%); border-color: rgba(167,139,250,0.05); animation-delay: 1s; }
+  .r3 { width: 1100px; height: 1100px; top: 50%; left: 50%; transform: translate(-50%,-50%); border-color: rgba(0,229,195,0.03); animation-delay: 1.2s; }
+
+  /* ---- SECTION ---- */
+  section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 80px 24px;
+  }
+
+  .section-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    color: var(--accent2);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    margin-bottom: 48px;
+    line-height: 1.1;
+  }
+
+  /* ---- CYCLE ---- */
+  .cycle-section {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 80px 24px;
+  }
+
+  .cycle-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .cycle-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    margin-top: 48px;
+  }
+
+  @media (max-width: 768px) {
+    .cycle-grid { grid-template-columns: repeat(2, 1fr); }
+    .stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
+    .pillars-grid { grid-template-columns: 1fr !important; }
+    .demand-grid { grid-template-columns: 1fr !important; }
+  }
+
+  .cycle-node {
+    background: var(--card);
+    padding: 32px 24px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cycle-node:hover, .cycle-node.active {
+    background: #192530;
+    transform: translateY(-4px);
+  }
+
+  .cycle-node::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--node-color);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
+  }
+
+  .cycle-node:hover::before, .cycle-node.active::before {
+    transform: scaleX(1);
+  }
+
+  .node-number {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--node-color);
+    letter-spacing: 0.15em;
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .node-icon {
+    font-size: 2rem;
+    margin-bottom: 12px;
+  }
+
+  .node-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.3rem;
+    margin-bottom: 8px;
+    color: var(--text);
+  }
+
+  .node-desc {
+    font-size: 0.88rem;
+    color: #7a9aaa;
+    line-height: 1.7;
+  }
+
+  .node-detail {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    font-size: 0.83rem;
+    color: var(--node-color);
+    display: none;
+    font-family: 'IBM Plex Mono', monospace;
+    line-height: 1.8;
+  }
+
+  .cycle-node.active .node-detail {
+    display: block;
+  }
+
+  /* Arrow connector */
+  .cycle-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    font-size: 1.2rem;
+    padding-top: 20px;
+  }
+
+  /* ---- STATS ---- */
+  .stats-section {
+    padding: 80px 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-top: 48px;
+  }
+
+  .stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 32px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stat-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 80px; height: 80px;
+    background: radial-gradient(circle, var(--stat-color) 0%, transparent 70%);
+    opacity: 0.1;
+  }
+
+  .stat-value {
+    font-family: 'DM Serif Display', serif;
+    font-size: 3rem;
+    color: var(--stat-color);
+    display: block;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .stat-unit {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+  }
+
+  .stat-label {
+    font-size: 0.9rem;
+    color: #8faab5;
+    margin-top: 12px;
+    line-height: 1.5;
+  }
+
+  /* ---- PILLARS ---- */
+  .pillars-section {
+    background: var(--surface);
+    padding: 80px 24px;
+    border-top: 1px solid var(--border);
+  }
+
+  .pillars-inner { max-width: 1200px; margin: 0 auto; }
+
+  .pillars-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 48px;
+  }
+
+  .pillar-card {
+    border: 1px solid var(--border);
+    padding: 36px 28px;
+    transition: all 0.3s ease;
+    position: relative;
+    cursor: default;
+  }
+
+  .pillar-card:hover {
+    border-color: var(--pillar-color);
+    background: rgba(255,255,255,0.02);
+  }
+
+  .pillar-letter {
+    font-family: 'DM Serif Display', serif;
+    font-size: 5rem;
+    color: var(--pillar-color);
+    opacity: 0.15;
+    position: absolute;
+    top: 16px; right: 24px;
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .pillar-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--pillar-color);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .pillar-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.5rem;
+    margin-bottom: 12px;
+  }
+
+  .pillar-text {
+    font-size: 0.88rem;
+    color: #7a9aaa;
+    line-height: 1.8;
+  }
+
+  .pillar-items {
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .pill {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    padding: 4px 12px;
+    border: 1px solid var(--pillar-color);
+    color: var(--pillar-color);
+    border-radius: 2px;
+    letter-spacing: 0.05em;
+  }
+
+  /* ---- DEMAND ---- */
+  .demand-section {
+    padding: 80px 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .demand-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    margin-top: 48px;
+    align-items: start;
+  }
+
+  .demand-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .demand-item {
+    display: flex;
+    gap: 16px;
+    padding: 20px;
+    border-left: 3px solid transparent;
+    background: var(--card);
+    transition: all 0.3s ease;
+    cursor: default;
+  }
+
+  .demand-item:hover {
+    border-left-color: var(--accent1);
+    transform: translateX(4px);
+  }
+
+  .demand-icon { font-size: 1.4rem; flex-shrink: 0; margin-top: 2px; }
+  .demand-title { font-weight: 600; font-size: 0.95rem; margin-bottom: 4px; }
+  .demand-text { font-size: 0.85rem; color: #7a9aaa; line-height: 1.6; }
+
+  .quote-block {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 40px 36px;
+    position: relative;
+  }
+
+  .quote-block::before {
+    content: '"';
+    font-family: 'DM Serif Display', serif;
+    font-size: 8rem;
+    color: var(--accent1);
+    opacity: 0.1;
+    position: absolute;
+    top: -20px; left: 20px;
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .quote-text {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.5rem;
+    line-height: 1.5;
+    color: var(--text);
+    margin-bottom: 24px;
+    font-style: italic;
+  }
+
+  .quote-source {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--accent1);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .roadmap {
+    margin-top: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .roadmap-step {
+    display: flex;
+    gap: 20px;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+
+  .roadmap-step:last-child { border-bottom: none; }
+
+  .step-dot {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--step-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--bg);
+    font-weight: 600;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .step-content .step-title { font-weight: 600; font-size: 0.95rem; margin-bottom: 4px; }
+  .step-content .step-text { font-size: 0.83rem; color: #7a9aaa; line-height: 1.6; }
+
+  /* ---- FOOTER ---- */
+  .footer {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 48px 24px;
+    text-align: center;
+  }
+
+  .footer-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+    margin-top: 16px;
+  }
+
+  /* ---- PROGRESS BAR ---- */
+  .progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent1), var(--accent3));
+    z-index: 100;
+    width: 0%;
+    transition: width 0.1s;
+  }
+
+  /* ---- ANIMATIONS ---- */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes orbitFade {
+    to { opacity: 1; }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ---- BAR CHART ---- */
+  .bar-chart {
+    margin-top: 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .bar-row {
+    display: grid;
+    grid-template-columns: 180px 1fr 60px;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .bar-label {
+    font-size: 0.83rem;
+    color: #8faab5;
+    text-align: right;
+  }
+
+  .bar-track {
+    background: rgba(255,255,255,0.04);
+    height: 10px;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    background: var(--bar-color);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 1.2s cubic-bezier(0.16,1,0.3,1);
+  }
+
+  .bar-fill.animated { transform: scaleX(1); }
+
+  .bar-pct {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--bar-color);
+    text-align: left;
+  }
+
+  /* Divider */
+  .divider {
+    max-width: 1200px;
+    margin: 0 auto;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progress"></div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="orbit-wrap">
+    <div class="orbit-ring r1"></div>
+    <div class="orbit-ring r2"></div>
+    <div class="orbit-ring r3"></div>
+  </div>
+  <p class="hero-label">Educación STEM · Siglo XXI · Juventud</p>
+  <h1>El conocimiento no se <em>archiva</em>,<br>circula y genera más</h1>
+  <p class="hero-sub">Condiciones para un ciclo virtuoso de aprendizaje que forma jóvenes capaces de crear valor con tecnología, resolver problemas complejos y colaborar en un mundo en transformación.</p>
+  <div class="scroll-hint">DESPLAZARSE PARA EXPLORAR</div>
+</div>
+
+<!-- CYCLE -->
+<div class="cycle-section">
+  <div class="cycle-inner">
+    <div class="reveal">
+      <p class="section-tag">El ciclo virtuoso</p>
+      <h2 class="section-title">Cuatro fases que transforman<br>el aprendizaje en nuevo conocimiento</h2>
+    </div>
+    <div class="cycle-grid reveal">
+      <div class="cycle-node" style="--node-color: #00e5c3;" onclick="toggleNode(this)">
+        <span class="node-number">01 / ABSORBER</span>
+        <div class="node-icon">📡</div>
+        <div class="node-title">Aprendizaje activo</div>
+        <p class="node-desc">El estudiante no recibe contenido pasivamente: interroga, experimenta y conecta con contextos reales.</p>
+        <div class="node-detail">→ Aprendizaje basado en proyectos<br>→ Entornos online personalizados<br>→ Docentes como facilitadores<br>→ Feedback en tiempo real con IA</div>
+      </div>
+      <div class="cycle-node" style="--node-color: #ff6b35;" onclick="toggleNode(this)">
+        <span class="node-number">02 / CIRCULAR</span>
+        <div class="node-icon">🔄</div>
+        <div class="node-title">Conocimiento compartido</div>
+        <p class="node-desc">Lo aprendido no queda en el aula: se comparte en comunidades, redes y espacios de colaboración abierta.</p>
+        <div class="node-detail">→ Plataformas colaborativas<br>→ GitHub educativo / portfolios<br>→ Mentorías entre pares<br>→ Conexión academia-empresa</div>
+      </div>
+      <div class="cycle-node" style="--node-color: #a78bfa;" onclick="toggleNode(this)">
+        <span class="node-number">03 / TRANSFORMAR</span>
+        <div class="node-icon">⚗️</div>
+        <div class="node-title">Creación de valor</div>
+        <p class="node-desc">El conocimiento se convierte en prototipos, soluciones, productos o investigaciones que impactan la realidad.</p>
+        <div class="node-detail">→ Laboratorios maker & fablab<br>→ Hackathons y challenges<br>→ Emprendimiento tecnológico<br>→ Proyectos de impacto social</div>
+      </div>
+      <div class="cycle-node" style="--node-color: #fbbf24;" onclick="toggleNode(this)">
+        <span class="node-number">04 / REGENERAR</span>
+        <div class="node-icon">🌱</div>
+        <div class="node-title">Nuevo conocimiento</div>
+        <p class="node-desc">El ciclo se cierra y se amplía: el conocimiento creado alimenta nuevas preguntas y más perfiles STEM.</p>
+        <div class="node-detail">→ Publicación y divulgación<br>→ Reconocimiento de logros<br>→ Escalabilidad de modelos<br>→ Política pública basada en datos</div>
+      </div>
+    </div>
+    <p style="font-family:'IBM Plex Mono',monospace; font-size:0.7rem; color:var(--muted); text-align:center; margin-top:20px; letter-spacing:0.1em;">▲ CLICK EN CADA FASE PARA EXPLORAR ESTRATEGIAS ▲</p>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats-section">
+  <div class="reveal">
+    <p class="section-tag">El contexto urgente</p>
+    <h2 class="section-title">Por qué esto importa ahora</h2>
+  </div>
+  <div class="stats-grid reveal">
+    <div class="stat-card" style="--stat-color: #00e5c3;">
+      <span class="stat-value">65%</span>
+      <span class="stat-unit">DE LOS EMPLEOS 2030</span>
+      <p class="stat-label">de los trabajos que ocuparán los jóvenes de hoy aún no existen</p>
+    </div>
+    <div class="stat-card" style="--stat-color: #ff6b35;">
+      <span class="stat-value">3×</span>
+      <span class="stat-unit">MÁS DEMANDA</span>
+      <p class="stat-label">de profesionales STEM respecto a la oferta actual en América Latina</p>
+    </div>
+    <div class="stat-card" style="--stat-color: #a78bfa;">
+      <span class="stat-value">40%</span>
+      <span class="stat-unit">BRECHA DE HABILIDADES</span>
+      <p class="stat-label">de empresas tech reportan dificultad para contratar por falta de competencias digitales</p>
+    </div>
+    <div class="stat-card" style="--stat-color: #fbbf24;">
+      <span class="stat-value">1:8</span>
+      <span class="stat-unit">RATIO DOCENTE-TECH</span>
+      <p class="stat-label">solo 1 de cada 8 docentes se siente preparado para integrar IA en su aula</p>
+    </div>
+  </div>
+
+  <!-- BAR CHART -->
+  <div class="reveal" style="margin-top:64px;">
+    <p class="section-tag">Competencias más demandadas en egresados secundaria</p>
+    <div class="bar-chart" id="barChart">
+      <div class="bar-row">
+        <span class="bar-label">Pensamiento crítico</span>
+        <div class="bar-track"><div class="bar-fill" style="--bar-color:#00e5c3; width:88%;"></div></div>
+        <span class="bar-pct" style="color:#00e5c3;">88%</span>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">Trabajo colaborativo</span>
+        <div class="bar-track"><div class="bar-fill" style="--bar-color:#ff6b35; width:84%;"></div></div>
+        <span class="bar-pct" style="color:#ff6b35;">84%</span>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">Alfabetización digital</span>
+        <div class="bar-track"><div class="bar-fill" style="--bar-color:#a78bfa; width:79%;"></div></div>
+        <span class="bar-pct" style="color:#a78bfa;">79%</span>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">Resolución de problemas</span>
+        <div class="bar-track"><div class="bar-fill" style="--bar-color:#fbbf24; width:76%;"></div></div>
+        <span class="bar-pct" style="color:#fbbf24;">76%</span>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">Creatividad aplicada</span>
+        <div class="bar-track"><div class="bar-fill" style="--bar-color:#00e5c3; width:71%;"></div></div>
+        <span class="bar-pct" style="color:#00e5c3;">71%</span>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">Programación básica</span>
+        <div class="bar-track"><div class="bar-fill" style="--bar-color:#ff6b35; width:63%;"></div></div>
+        <span class="bar-pct" style="color:#ff6b35;">63%</span>
+      </div>
+    </div>
+    <p style="font-size:0.75rem; color:var(--muted); margin-top:12px; font-family:'IBM Plex Mono',monospace;">Fuente: Síntesis de estudios WEF, OCDE y LinkedIn Economic Graph 2023-2024</p>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- PILLARS -->
+<div class="pillars-section">
+  <div class="pillars-inner">
+    <div class="reveal">
+      <p class="section-tag">Tres pilares de transformación</p>
+      <h2 class="section-title">Condiciones para que el ciclo<br>sea posible en secundaria</h2>
+    </div>
+    <div class="pillars-grid reveal">
+      <div class="pillar-card" style="--pillar-color: #00e5c3;">
+        <span class="pillar-letter">D</span>
+        <p class="pillar-tag">01 · Docentes</p>
+        <h3 class="pillar-title">Facilitadores del futuro</h3>
+        <p class="pillar-text">No alcanza con que los docentes "usen tecnología". Necesitan formación continua, comunidades de práctica y tiempo real para diseñar experiencias de aprendizaje innovadoras.</p>
+        <div class="pillar-items">
+          <span class="pill">Formación en IA</span>
+          <span class="pill">Metodologías activas</span>
+          <span class="pill">Comunidades docentes</span>
+          <span class="pill">Autonomía curricular</span>
+        </div>
+      </div>
+      <div class="pillar-card" style="--pillar-color: #ff6b35;">
+        <span class="pillar-letter">I</span>
+        <p class="pillar-tag">02 · Infraestructura</p>
+        <h3 class="pillar-title">Plataformas que habilitan</h3>
+        <p class="pillar-text">El entorno online no es solo un repositorio. Debe facilitar la creación, la colaboración y la conexión entre estudiantes, docentes, empresas y academia.</p>
+        <div class="pillar-items">
+          <span class="pill">LMS adaptativo</span>
+          <span class="pill">Herramientas maker</span>
+          <span class="pill">APIs educativas</span>
+          <span class="pill">Datos de aprendizaje</span>
+        </div>
+      </div>
+      <div class="pillar-card" style="--pillar-color: #a78bfa;">
+        <span class="pillar-letter">P</span>
+        <p class="pillar-tag">03 · Política educativa</p>
+        <h3 class="pillar-title">Marcos que sostienen</h3>
+        <p class="pillar-text">Sin política pública que reconozca, financie y evalúe estas competencias, las innovaciones quedan aisladas. Se necesitan marcos curriculares vivos, no estáticos.</p>
+        <div class="pillar-items">
+          <span class="pill">Currículum STEM</span>
+          <span class="pill">Evaluación por competencias</span>
+          <span class="pill">Alianzas público-privadas</span>
+          <span class="pill">Datos abiertos</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DEMAND -->
+<div class="demand-section">
+  <div class="reveal">
+    <p class="section-tag">La demanda implícita</p>
+    <h2 class="section-title">No solo usar tecnología:<br>crear valor con ella</h2>
+  </div>
+  <div class="demand-grid reveal">
+    <div class="demand-list">
+      <div class="demand-item">
+        <div class="demand-icon">🔧</div>
+        <div>
+          <div class="demand-title">Resolver problemas complejos</div>
+          <div class="demand-text">Identificar causas raíz, diseñar soluciones sistémicas y adaptarse cuando el contexto cambia.</div>
+        </div>
+      </div>
+      <div class="demand-item">
+        <div class="demand-icon">🤝</div>
+        <div>
+          <div class="demand-title">Colaborar en diversidad</div>
+          <div class="demand-text">Trabajar con personas de distintas disciplinas, culturas y roles. La innovación emerge del cruce.</div>
+        </div>
+      </div>
+      <div class="demand-item">
+        <div class="demand-icon">💡</div>
+        <div>
+          <div class="demand-title">Crear, no solo consumir</div>
+          <div class="demand-text">Pasar de usuario a productor: prototipar, programar, diseñar y publicar para audiencias reales.</div>
+        </div>
+      </div>
+      <div class="demand-item">
+        <div class="demand-icon">🧭</div>
+        <div>
+          <div class="demand-title">Aprender a aprender</div>
+          <div class="demand-text">La habilidad más crítica del siglo XXI: actualizar conocimientos y reconvertirse a lo largo de la vida.</div>
+        </div>
+      </div>
+      <div class="demand-item">
+        <div class="demand-icon">📊</div>
+        <div>
+          <div class="demand-title">Pensar con datos</div>
+          <div class="demand-text">Interpretar información, detectar sesgos y tomar decisiones basadas en evidencia, no en intuición.</div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="quote-block">
+        <p class="quote-text">Los egresados que más valora la industria no son los que saben más: son los que pueden aprender lo que aún no existe.</p>
+        <span class="quote-source">— Síntesis LinkedIn Learning Report 2024</span>
+      </div>
+
+      <div class="roadmap" style="margin-top:32px;">
+        <p style="font-family:'IBM Plex Mono',monospace; font-size:0.7rem; color:var(--accent2); letter-spacing:0.15em; margin-bottom:8px;">HOJA DE RUTA · SECUNDARIA STEM</p>
+        <div class="roadmap-step">
+          <div class="step-dot" style="--step-color:#00e5c3;">01</div>
+          <div class="step-content">
+            <div class="step-title">Diagnóstico de brechas digitales</div>
+            <div class="step-text">Mapear infraestructura, competencias docentes y acceso estudiantil.</div>
+          </div>
+        </div>
+        <div class="roadmap-step">
+          <div class="step-dot" style="--step-color:#ff6b35;">02</div>
+          <div class="step-content">
+            <div class="step-title">Diseño de experiencias auténticas</div>
+            <div class="step-text">Proyectos vinculados a problemas reales del entorno local y global.</div>
+          </div>
+        </div>
+        <div class="roadmap-step">
+          <div class="step-dot" style="--step-color:#a78bfa;">03</div>
+          <div class="step-content">
+            <div class="step-title">Ecosistema colaborativo</div>
+            <div class="step-text">Conectar escuelas, universidades, empresas tech y organismos públicos.</div>
+          </div>
+        </div>
+        <div class="roadmap-step">
+          <div class="step-dot" style="--step-color:#fbbf24;">04</div>
+          <div class="step-content">
+            <div class="step-title">Medición y mejora continua</div>
+            <div class="step-text">Evaluar por competencias demostradas, no solo por contenidos memorizados.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <p style="font-family:'DM Serif Display',serif; font-size:1.6rem; color:var(--accent1);">El ciclo comienza con una decisión.</p>
+  <p style="font-size:0.9rem; color:var(--muted); margin-top:12px; max-width:500px; margin-left:auto; margin-right:auto;">Cada actor del ecosistema —docente, directivo, empresa, gobierno— tiene un rol en que el conocimiento no se archive, sino que circule.</p>
+  <div class="footer-tag" style="margin-top:32px;">CICLO VIRTUOSO STEM · EDUCACIÓN SECUNDARIA · SIGLO XXI</div>
+</div>
+
+<script>
+  // Progress bar
+  window.addEventListener('scroll', () => {
+    const h = document.documentElement;
+    const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+    document.getElementById('progress').style.width = pct + '%';
+  });
+
+  // Reveal on scroll
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 120);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  reveals.forEach(r => observer.observe(r));
+
+  // Bar chart animation
+  const barObserver = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting) {
+      document.querySelectorAll('.bar-fill').forEach((bar, i) => {
+        setTimeout(() => bar.classList.add('animated'), i * 150);
+      });
+      barObserver.unobserve(entries[0].target);
+    }
+  }, { threshold: 0.3 });
+  barObserver.observe(document.getElementById('barChart'));
+
+  // Toggle cycle nodes
+  function toggleNode(el) {
+    const wasActive = el.classList.contains('active');
+    document.querySelectorAll('.cycle-node').forEach(n => n.classList.remove('active'));
+    if (!wasActive) el.classList.add('active');
+  }
+</script>
+</body>
+</html>
